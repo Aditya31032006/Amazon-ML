@@ -9,3 +9,9 @@ jupyterlab
 torch
 torchvision
 torchaudio
+
+# Phase 1: Text Cleaning & Normalization
+ftfy
+unidecode
+pyarrow
+rapidfuzz
