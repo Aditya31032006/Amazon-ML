@@ -1,0 +1,98 @@
+# ==========================================
+# Datasets & Data Files (Large files > 100MB)
+# ==========================================
+# The challenge TSV datasets range from 120MB to 500MB+
+# GitHub will reject pushes containing files > 100MB
+**/dataset/
+**/datasets/
+dataset/
+datasets/
+data/
+*.tsv
+*.csv
+*.parquet
+*.feather
+*.jsonl
+*.h5
+*.hdf5
+*.zip
+*.tar.gz
+*.tgz
+*.rar
+*.7z
+
+# Office lock files (created when files are opened in Excel / LibreOffice)
+.~lock.*#
+
+# ==========================================
+# Python Virtual Environments
+# ==========================================
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# ==========================================
+# Python Bytecode & Cache
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# ==========================================
+# Jupyter Notebook Checkpoints
+# ==========================================
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+
+# ==========================================
+# ML Model Checkpoints, Weights & Embeddings
+# ==========================================
+*.pt
+*.pth
+*.bin
+*.onnx
+*.pkl
+*.pickle
+*.joblib
+*.safetensors
+models/
+checkpoints/
+weights/
+embeddings/
+
+# ==========================================
+# Predictions, Submissions & Logs
+# ==========================================
+submissions/
+outputs/
+output/
+logs/
+*.log
+
+# ==========================================
+# OS & Editor Files
+# ==========================================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ==========================================
+# Secrets & Environment Variables
+# ==========================================
+.env
+.env.*
+!.env.example
