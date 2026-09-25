@@ -55,13 +55,15 @@ LEGAL_SUFFIX_MAP = [
     (re.compile(r"\b(?:private\s+limited|pvt\.?\s*ltd\.?|private\s+ltd|pvt\b|praaivett\s+limittedd|praaivett|piraiveett\s+limittett|piraiveett)\b", re.I), "pvt ltd"),
     # Limited Liability Partnership
     (re.compile(r"\b(?:limited\s+liability\s+partnership|l\.?l\.?p\.?|llp|elelpii)\b", re.I), "llp"),
-    # Limited Liability Company
+    # Limited Liability Company & Professional LLC
+    (re.compile(r"\b(?:professional\s+limited\s+liability\s+company|p\.?l\.?l\.?c\.?|pllc)\b", re.I), "pllc"),
     (re.compile(r"\b(?:limited\s+liability\s+company|l\.?l\.?c\.?|llc)\b", re.I), "llc"),
     # Limited Partnership
     (re.compile(r"\b(?:limited\s+partnership|l\.?p\.?|lp)\b", re.I), "lp"),
     # Incorporated
     (re.compile(r"\b(?:incorporated|inc\.?)\b", re.I), "inc"),
-    # Corporation
+    # Corporation & Professional Corp
+    (re.compile(r"\b(?:professional\s+corporation|p\.?c\.\b|\bpc$)\b", re.I), "pc"),
     (re.compile(r"\b(?:corporation|corp\.?)\b", re.I), "corp"),
     # General Limited
     (re.compile(r"\b(?:limited|ltd\.?|limittedd|limittett)\b", re.I), "ltd"),
@@ -71,19 +73,24 @@ LEGAL_SUFFIX_MAP = [
     (re.compile(r"\b(?:enterprises|enterprise)\b", re.I), "enterprises"),
     (re.compile(r"\b(?:holdings|holding)\b", re.I), "holdings"),
     (re.compile(r"\b(?:services|service)\b", re.I), "services"),
-    # French corporate forms
+    # French corporate forms (sarl, sasu, sas, eurl, sci, sa)
     (re.compile(r"\b(?:s\.?a\.?r\.?l\.?|sarl)\b", re.I), "sarl"),
+    (re.compile(r"\b(?:s\.?a\.?s\.?u\.?|sasu)\b", re.I), "sasu"),
     (re.compile(r"\b(?:s\.?a\.?s\.?|sas)\b", re.I), "sas"),
+    (re.compile(r"\b(?:e\.?u\.?r\.?l\.?|eurl)\b", re.I), "eurl"),
+    (re.compile(r"\b(?:s\.?c\.?i\.?|sci)\b", re.I), "sci"),
     (re.compile(r"\b(?:s\.?a\.?|sa)\b", re.I), "sa"),
 ]
 
 # Set of known canonical suffixes to strip from core_name
 CANONICAL_SUFFIX_TOKENS = {
-    "pvt", "ltd", "inc", "corp", "llc", "llp", "lp", "co",
-    "enterprises", "holdings", "services", "sarl", "sas", "sa",
+    "pvt", "ltd", "inc", "corp", "llc", "pllc", "llp", "lp", "co", "pc",
+    "enterprises", "holdings", "services",
+    "sarl", "sasu", "sas", "eurl", "sci", "sa",
     "private", "limited", "corporation", "incorporated", "company",
     "praaivett", "limittedd", "elelpii", "piraiveett", "limittett"
 }
+
 
 # Address Token Standardization Mapping
 ADDRESS_TOKEN_MAP = {
@@ -298,8 +305,15 @@ class TextCleaner:
         elif country_norm == "US":
             for pattern, replacement in US_STATE_MAP.items():
                 norm = re.sub(pattern, replacement, norm, flags=re.IGNORECASE)
+        elif country_norm == "FRANCE":
+            # Expand road abbreviations in French addresses safely without affecting non-road words
+            norm = re.sub(r"\b(r|r\.)\s+(de|du|des|d)\b", r"rue \2", norm, flags=re.IGNORECASE)
+            norm = re.sub(r"\b(\d+[\w-]*)\s+(r|r\.)\b", r"\1 rue", norm, flags=re.IGNORECASE)
+            norm = re.sub(r"\b(bd|bd\.|bld)\b", "boulevard", norm, flags=re.IGNORECASE)
+            norm = re.sub(r"\b(av|av\.)\b", "avenue", norm, flags=re.IGNORECASE)
 
         # Collapse duplicate adjacent tokens (e.g. "unit unit 2" -> "unit 2")
+
         tokens = norm.split()
         dedup_tokens = []
         for tok in tokens:

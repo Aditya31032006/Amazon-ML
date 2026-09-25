@@ -3,11 +3,17 @@
 # ==========================================
 # The challenge TSV datasets range from 120MB to 500MB+
 # GitHub will reject pushes containing files > 100MB
+# Top-level datasets directory only (raw/processed data)
+/data/
+/data/**
 **/dataset/
 **/datasets/
-dataset/
-datasets/
-data/
+
+# Ensure Python source code inside src/data/ is always tracked
+!src/data/
+!src/data/**
+
+
 *.tsv
 *.csv
 *.parquet

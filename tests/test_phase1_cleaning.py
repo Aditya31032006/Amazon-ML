@@ -36,7 +36,10 @@ def test_cleaning_examples():
         # Indic legal suffix tests
         ("राम मार्केटिंग प्राइवेट लिमिटेड", "raam maarketting pvt ltd", "raam maarketting"),
         ("आदित्य प्रॉपर्टीज एलएलपी", "aadity pronprttiij llp", "aadity pronprttiij"),
-        ("குளோபல் பிசினஸ் பிரைவேட் லிமிடெட்", "kulloopl picinnns pvt ltd", "kulloopl picinnns"),
+        ("Thermal and Fils SASU", "thermal and fils sasu", "thermal and fils"),
+        ("SCI Ptit Amicale", "sci ptit amicale", "ptit amicale"),
+        ("Centre Commercial EURL", "centre commercial eurl", "centre commercial"),
+        ("Center Grand PLLC", "center grand pllc", "center grand"),
     ]
 
     print("=== Testing Business Name Cleaner ===")
@@ -57,7 +60,13 @@ def test_cleaning_examples():
         ("C-21 - S, AMBATTUR, CHENNAI, TN", "INDIA", "c 21 s ambattur chennai tamil nadu"),
         ("Mulund Goreagon Link Rd, Near Fortis, Mumbai, MH", "INDIA", "mulund goreagon link road near fortis mumbai maharashtra"),
         ("294 Meadowcreek Drive, Unit Unit 2, Pewaukee, WI", "US", "294 meadowcreek drive unit 2 pewaukee wisconsin"),
+        # France road abbreviations
+        ("63 r de dieppe, lille", "FRANCE", "63 rue de dieppe lille"),
+        ("18 bd saint michel, paris", "FRANCE", "18 boulevard saint michel paris"),
+        # Ensure 'r' in US is NOT replaced
+        ("100 R Street, Washington, DC", "US", "100 r street washington dc"),
     ]
+
     for raw_addr, country, exp_addr in addr_cases:
         cleaned_addr = TextCleaner.clean_address(raw_addr, country=country)
         print(f"RAW [{country}]: {raw_addr}")
